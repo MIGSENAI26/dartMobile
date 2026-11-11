@@ -27,16 +27,16 @@ export function Button({label, ...rest} : ButtonProps){
 
 const styles = StyleSheet.create({
     container:{
-        width: 200,
+        width: 140,
         height: 48,
         marginTop: 20,
-        backgroundColor: "##30ed0a",
+        backgroundColor: "white",
         borderRadius: 8,
         justifyContent: "center",
         alignItems: "center"
     },
     label:{
-        color: "#fff",
+        color: "#000000",
         fontFamily: "OpenSans",
         fontSize: 23
     }

@@ -12,19 +12,19 @@ export default function LayoutTabs(){
         }}
         >
             <Tabs.Screen 
-                name="index"
+                name="missao"
                 options={{
                     tabBarLabel: "Missão",
-                    tabBarIcon: ({size})=> <MaterialIcons name="book" size={size}/>,
+                    tabBarIcon: ({size})=> <MaterialIcons name="flag" size={size}/>,
                     tabBarItemStyle: {flex: 1}
                 }}
             />
 
             <Tabs.Screen 
-                name="dart"
+                name="index"
                 options={{
                     tabBarLabel: "DART",
-                    tabBarIcon: ({size})=> <MaterialIcons name="audiotrack" size={size}/>,
+                    tabBarIcon: ({size})=> <MaterialIcons name="gps-fixed" size={size}/>,
                     tabBarItemStyle: {flex: 1}
                 }}
             />
@@ -33,7 +33,7 @@ export default function LayoutTabs(){
                 name="buy"
                 options={{
                     tabBarLabel: "Comprar",
-                    tabBarIcon: ({size})=> <MaterialIcons name="audiotrack" size={size}/>,
+                    tabBarIcon: ({size})=> <MaterialIcons name="shopping-cart" size={size}/>,
                     tabBarItemStyle: {flex: 1}
                 }}
             />

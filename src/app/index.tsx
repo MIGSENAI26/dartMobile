@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 import {TouchableOpacity, ScrollView, Alert, KeyboardAvoidingView, Platform} from "react-native";
 import {useFonts} from 'expo-font';
-import {router} from "expo-router";
+import {Link, router} from "expo-router";
 import { useState } from 'react';
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
@@ -11,20 +11,16 @@ const { width, height } = Dimensions.get('screen');
 
 export default function Index() {
     const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
+    // const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmar, setConfirmar] = useState("");
+    // const [confirmar, setConfirmar] = useState("");
 
-    function SignUp(){
-        if (!email.trim() || !name.trim() || !password.trim() || !confirmar.trim()){
-            Alert.alert("Erro", `preencha corretamente os campos para entrar`);
+    function SignIn(){
+        if (!name.trim() || !password.trim()){
+            Alert.alert("Erro", `Preencha corretamente os campos para entrar!`);
             return;
         }
-        else if (password != confirmar){
-            Alert.alert("Erro", `o campo confirmar senha precisa ser igual ao campo senha`);
-            return;
-        }
-        Alert.alert("Bem vindo", `Login realizado com ${email}`);
+        Alert.alert("Bem vindo", `${name}!`);
         router.navigate("/(tabs)");
     }
 
@@ -37,21 +33,36 @@ export default function Index() {
       />
 
       <View style={styles.form}>
-        <Input 
-            placeholder="Usuário"
-            placeholderTextColor="#6b6a6a"
-            onChangeText={setName}
-        />
-        <Input 
-            placeholder="Senha"
-            placeholderTextColor="#6b6a6a"
-            secureTextEntry
-            onChangeText={setPassword}
-        />
-        <Button 
-            label="Entrar"
-            onPress={SignUp}
-        />
+        <View style={styles.inputContainer}>
+          <Input
+              placeholder="Usuário"
+              placeholderTextColor="#6b6a6a"
+              onChangeText={setName}
+          />
+          <Input
+              placeholder="Senha"
+              placeholderTextColor="#6b6a6a"
+              secureTextEntry
+              onChangeText={setPassword}
+          />
+          <View style={styles.link}>
+            <Text>
+              Não tem conta?
+            </Text>
+            <Link href="/cadastro" style={{ color: '#fefefe', textDecorationLine: 'underline' , fontWeight: "bold"}}>
+              Cadastre-se
+            </Link>
+          </View>
+          <Link href="/cadastro" style={{ color: '#ffffff', textDecorationLine: 'underline' , fontWeight: "bold", marginTop: -15}}>
+              Esqueci minha senha
+          </Link>
+        </View>
+        <View>
+          <Button
+              label="Entrar "
+              onPress={SignIn}
+          />
+        </View>
       </View>
     </View>
   );
@@ -94,6 +105,22 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     textAlign: "center",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: "#77af6f",
+    borderRadius: 12,
+    width: 350,
+    height: 310
+  },
+  inputContainer:{
+    display: "flex",
+    flexDirection: "column",
+    gap: 20,
+    marginTop: 35,
+  },
+  link:{
+    display: "flex",
+    flexDirection: "row",
+    gap: 5,
+    marginTop: -15
   }
 });
