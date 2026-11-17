@@ -1,28 +1,49 @@
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Alert, ActivityIndicator } from 'react-native';
 import { Image } from 'expo-image';
-import {TouchableOpacity, ScrollView, Alert, KeyboardAvoidingView, Platform} from "react-native";
-import {useFonts} from 'expo-font';
-import {Link, router} from "expo-router";
+import { Link, router } from "expo-router";
 import { useState } from 'react';
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
+import { useSecurePassword } from "../hooks/useSecurePassword";
 
 const { width, height } = Dimensions.get('screen');
 
 export default function Senha() {
-    const [name, setName] = useState("");
-    // const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    // const [confirmar, setConfirmar] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmar, setConfirmar] = useState("");
 
-    function SignIn(){
-        if (!name.trim() || !password.trim()){
-            Alert.alert("Erro", `Preencha corretamente os campos para entrar!`);
-            return;
-        }
-        Alert.alert("Bem vindo", `${name}!`);
-        router.navigate("/(tabs)");
+  const { getPassword, savePassword, loading, error } = useSecurePassword();
+
+  async function ResetPassword() {
+    if (!email.trim() || !password.trim() || !confirmar.trim()) {
+      Alert.alert("Erro", "Preencha corretamente os campos para entrar!");
+      return;
     }
+    if (password !== confirmar) {
+      Alert.alert("Erro", "O campo confirmar senha precisa ser igual ao campo senha");
+      return;
+    }
+
+    const chaveUsuario = `pass_${email.trim().toLowerCase()}`;
+
+    // Verifica se o e-mail existe salvo no dispositivo antes de trocar
+    const senhaAntiga = await getPassword(chaveUsuario);
+    if (!senhaAntiga) {
+      Alert.alert("Erro", "Nenhuma conta encontrada com este e-mail neste dispositivo.");
+      return;
+    }
+
+    // Sobrescreve a senha antiga pela nova
+    const isUpdated = await savePassword(chaveUsuario, password);
+
+    if (isUpdated) {
+      Alert.alert("Sucesso", "Senha atualizada! Bem-vindo de volta.");
+      router.navigate("/(tabs)");
+    } else {
+      Alert.alert("Erro", error || "Não foi possível atualizar a senha.");
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -35,33 +56,45 @@ export default function Senha() {
       <View style={styles.form}>
         <View style={styles.inputContainer}>
           <Input
-              placeholder="Usuário"
-              placeholderTextColor="#6b6a6a"
-              onChangeText={setName}
+            placeholder="Confirme seu e-mail"
+            placeholderTextColor="#6b6a6a"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={email}
+            onChangeText={setEmail}
           />
           <Input
-              placeholder="Senha"
-              placeholderTextColor="#6b6a6a"
-              secureTextEntry
-              onChangeText={setPassword}
+            placeholder="Nova senha"
+            placeholderTextColor="#6b6a6a"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+          <Input
+            placeholder="Confirmar senha"
+            placeholderTextColor="#6b6a6a"
+            secureTextEntry
+            value={confirmar}
+            onChangeText={setConfirmar}
           />
           <View style={styles.link}>
             <Text>
               Não tem conta?
             </Text>
-            <Link href="/cadastro" style={{ color: '#fefefe', textDecorationLine: 'underline' , fontWeight: "bold"}}>
+            <Link href="/cadastro" style={{ color: '#fefefe', textDecorationLine: 'underline', fontWeight: "bold" }}>
               Cadastre-se
             </Link>
           </View>
-          <Link href="/cadastro" style={{ color: '#ffffff', textDecorationLine: 'underline' , fontWeight: "bold", marginTop: -15}}>
-              Esqueci minha senha
-          </Link>
         </View>
         <View>
-          <Button
+          {loading ? (
+            <ActivityIndicator size="small" color="#ffffff" />
+          ) : (
+            <Button
               label="Entrar "
-              onPress={SignIn}
-          />
+              onPress={ResetPassword}
+            />
+          )}
         </View>
       </View>
     </View>
@@ -83,23 +116,7 @@ const styles = StyleSheet.create({
     height: height,
     zIndex: 0,
   },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1,
-  },
-  title: {
-    fontSize: 28,
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#B3B3B3',
-  },
-  form:{
+  form: {
     marginTop: -30,
     gap: 12,
     display: "flex",
@@ -109,15 +126,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#77af6f",
     borderRadius: 12,
     width: 350,
-    height: 310
+    height: 370
   },
-  inputContainer:{
+  inputContainer: {
     display: "flex",
     flexDirection: "column",
     gap: 20,
     marginTop: 35,
   },
-  link:{
+  link: {
     display: "flex",
     flexDirection: "row",
     gap: 5,
