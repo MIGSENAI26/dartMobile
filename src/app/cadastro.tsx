@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     textAlign: "center",
     alignItems: "center",
-    backgroundColor: "#77af6f",
+    backgroundColor: "white",
     borderRadius: 12,
     width: 350,
     height: 540

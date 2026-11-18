@@ -30,13 +30,13 @@ const styles = StyleSheet.create({
         width: 140,
         height: 48,
         marginTop: 20,
-        backgroundColor: "white",
+        backgroundColor: "#77af6f",
         borderRadius: 8,
         justifyContent: "center",
         alignItems: "center"
     },
     label:{
-        color: "#000000",
+        color: "white",
         fontFamily: "OpenSans",
         fontSize: 23
     }

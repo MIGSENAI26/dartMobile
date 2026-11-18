@@ -1,8 +1,10 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Image } from "expo-image";
 import { useFonts } from 'expo-font';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 interface NameProps {
     name: string;
@@ -19,6 +21,12 @@ export function Header({ name }: NameProps) {
 
     const MaskedViewTSFix = MaskedView as any;
 
+    function handleVoltarLogin() {
+        if (router.canGoBack()) {
+            router.back();
+        }
+    }
+
     return (
         <View style={styles.container}>
             <Image
@@ -30,7 +38,9 @@ export function Header({ name }: NameProps) {
                 style={styles.maskedView} 
                 maskElement={
                     <View style={styles.maskContainer}>
-                        <Text style={styles.text}>{name}</Text>
+                        <Text style={styles.text} numberOfLines={1} adjustsFontSizeToFit>
+                            {name}
+                        </Text>
                     </View>
                 }
             >
@@ -43,6 +53,17 @@ export function Header({ name }: NameProps) {
                     />
                 </View>
             </MaskedViewTSFix>
+
+            <Pressable 
+                onPress={handleVoltarLogin} 
+                style={({ pressed }) => [
+                    styles.logoutButton,
+                    pressed && { opacity: 0.7 }
+                ]}
+            >
+                <Ionicons name="log-out-outline" size={24} color="#30ed0a" />
+                <Text style={styles.logoutText}>Voltar</Text>
+            </Pressable>
         </View>
     );
 }
@@ -76,5 +97,23 @@ const styles = StyleSheet.create({
         fontSize: 50, 
         fontWeight: "bold",
         color: 'black',
+    },
+    logoutButton: {
+        alignItems: "center",
+        justifyContent: "center",
+        marginLeft: 10,
+        marginTop: 10,
+        paddingVertical: 8,
+        paddingHorizontal: 10,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: "#30ed0a",
+        backgroundColor: "#121212",
+    },
+    logoutText: {
+        color: "#FFFFFF",
+        fontSize: 12,
+        fontWeight: "bold",
+        marginTop: 2,
     }
 });

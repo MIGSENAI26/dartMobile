@@ -81,7 +81,7 @@ export default function Senha() {
             <Text>
               Não tem conta?
             </Text>
-            <Link href="/cadastro" style={{ color: '#fefefe', textDecorationLine: 'underline', fontWeight: "bold" }}>
+            <Link href="/cadastro" style={{ color: '#77af6f', textDecorationLine: 'underline', fontWeight: "bold" }}>
               Cadastre-se
             </Link>
           </View>
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     textAlign: "center",
     alignItems: "center",
-    backgroundColor: "#77af6f",
+    backgroundColor: "white",
     borderRadius: 12,
     width: 350,
     height: 370
